@@ -11,7 +11,7 @@ type InterestedModalProps = {
   setToast: Dispatch<SetStateAction<string | null>>;
 };
 
-const InterestedSchema = z.object({
+const interestedSchema = z.object({
   firstName: z
     .string()
     .min(1, { message: "Required field *" })
@@ -33,8 +33,8 @@ export default function InterestedModal(props: InterestedModalProps) {
     reset,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<z.infer<typeof InterestedSchema>>({
-    resolver: zodResolver(InterestedSchema),
+  } = useForm<z.infer<typeof interestedSchema>>({
+    resolver: zodResolver(interestedSchema),
     mode: "onSubmit",
     reValidateMode: "onBlur",
     shouldUseNativeValidation: false,
@@ -49,7 +49,7 @@ export default function InterestedModal(props: InterestedModalProps) {
     });
   };
 
-  const onSubmit = async (data: z.infer<typeof InterestedSchema>) => {
+  const onSubmit = (data: z.infer<typeof interestedSchema>) => {
     const { firstName, lastName, email } = data;
     mutation.mutate(
       {
@@ -200,7 +200,9 @@ export default function InterestedModal(props: InterestedModalProps) {
                     disabled={isSubmitting}
                     onClick={handleSubmit(onSubmit)}
                   >
-                    {isSubmitting ? "Loading..." : "Submit"}
+                    {isSubmitting || mutation.isLoading
+                      ? "Loading..."
+                      : "Submit"}
                   </button>
                   <button
                     type="button"

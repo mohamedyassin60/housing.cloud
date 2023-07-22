@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import Link from "next/link";
 
 type UnitProps = {
   id: string;
@@ -24,10 +25,13 @@ export default function Unit(props: UnitProps) {
     <div className="flex flex-col justify-between gap-x-6 py-5 sm:flex-row">
       <div className="flex gap-x-4">
         <div className="flex-auto">
-          <p className="text-md font-semibold leading-6 text-gray-900">
+          <Link
+            className="text-md font-semibold leading-6 text-gray-900 underline"
+            href={`/units/${id}`}
+          >
             {name}
-          </p>
-          <p className="mt-1 text-sm leading-5 text-gray-500">
+          </Link>
+          <p className="mt-2 text-sm leading-5 text-gray-500">
             <span className="font-bold text-black">{bedrooms}</span> bedrooms
           </p>
           <p className="mt-2 text-sm leading-5 text-gray-500">{description}</p>
@@ -35,7 +39,7 @@ export default function Unit(props: UnitProps) {
       </div>
       <div className="mt-3 sm:mt-0 sm:flex sm:flex-col sm:items-end">
         <p className="text-sm leading-6 text-gray-900">${price}</p>
-        <div className="flex items-center gap-x-1.5">
+        <div className="mt-1 flex items-center gap-x-1.5">
           <p className="text-sm leading-5 text-gray-500">
             {distanceToCampus}m to campus
           </p>

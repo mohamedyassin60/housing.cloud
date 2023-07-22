@@ -9,7 +9,7 @@ import Toast from "~/components/toast";
 export default function Home() {
   const [toast, setToast] = useState<string | null>(null);
   const [show, toggleShow] = useState<string | null>(null); // Holds unit id
-  const { data, error, isLoading } = api.housingUnit.getAllAvailable.useQuery();
+  const { data, error, isLoading } = api.housingUnit.getAllAvailable.useQuery(); // Fetch all available housing units
 
   return (
     <>

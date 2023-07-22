@@ -17,11 +17,11 @@ export const housingUnitRouter = createTRPCRouter({
   updateById: publicProcedure
     .input(z.object({
       id: z.string(),
-      name: z.string(),
-      description: z.string(),
-      price: z.number(),
-      bedrooms: z.number(),
-      distanceToCampus: z.number()
+      name: z.string().min(1),
+      description: z.string().min(1),
+      price: z.number().positive().min(1),
+      bedrooms: z.number().positive().min(1),
+      distanceToCampus: z.number().positive().min(1)
     }))
     .mutation(({ input, ctx }) => {
       const { id, name, description, price, bedrooms, distanceToCampus } = input
