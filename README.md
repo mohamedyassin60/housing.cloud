@@ -2,6 +2,15 @@
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
+## How do I run the app?
+
+- Clone the project
+- Run `npm install` to install dependencies
+- Create .env file similar to .env.example
+- Run `npx prisma db push` to sync Prisma
+- Run `npm run db-seed` to seed DB with some date
+- Run `npm run dev` to run the app
+
 ## What's next? How do I make an app with this?
 
 We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
