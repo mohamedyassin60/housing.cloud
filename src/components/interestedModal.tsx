@@ -11,7 +11,7 @@ type InterestedModalProps = {
   setToast: Dispatch<SetStateAction<string | null>>;
 };
 
-const interestedSchema = z.object({
+export const interestedSchema = z.object({
   firstName: z
     .string()
     .min(1, { message: "Required field *" })
@@ -26,6 +26,7 @@ const interestedSchema = z.object({
 export default function InterestedModal(props: InterestedModalProps) {
   const { show, toggleShow, setToast } = props;
   const cancelButtonRef = useRef(null);
+  const utils = api.useContext();
   const mutation = api.studentRouter.addToInterested.useMutation();
 
   const {
@@ -58,10 +59,8 @@ export default function InterestedModal(props: InterestedModalProps) {
         email,
       },
       {
-        onError(error) {
-          console.log("error", error);
-        },
         onSuccess() {
+          utils.housingUnit.invalidate();
           setToast("Your request has been saved successfully.");
           onClose();
         },

@@ -3,13 +3,15 @@ import Head from "next/head";
 import Unit from "~/components/unit";
 import InterestedModal from "~/components/interestedModal";
 import { api } from "~/utils/api";
-import Filters from "~/components/filters";
+import Filters, { filtersSchema } from "~/components/filters";
 import Toast from "~/components/toast";
+import { z } from "zod";
 
 export default function Home() {
+  const [filters, setFilters] = useState<z.infer<typeof filtersSchema>>({});
   const [toast, setToast] = useState<string | null>(null);
   const [show, toggleShow] = useState<string | null>(null); // Holds unit id
-  const { data, error, isLoading } = api.housingUnit.getAllAvailable.useQuery(); // Fetch all available housing units
+  const { data, error, isLoading } = api.housingUnit.getAll.useQuery(filters);
 
   return (
     <>
@@ -31,43 +33,30 @@ export default function Home() {
               Sorry, we couldn’t make finish your request! {error.message}
             </p>
           )}
-          {isLoading && (
-            <p className="text-semibold mt-6 text-lg leading-7 text-gray-600">
-              Loading...
-            </p>
-          )}
-          {data && (
-            <div className="flex w-full max-w-4xl gap-10">
-              <Filters />
-              <div className="flex-1">
-                <h3 className="font-semibold">Available Units</h3>
-                <ul role="list" className="w-full divide-y divide-gray-100">
-                  {data.map(
-                    ({
-                      id,
-                      name,
-                      description,
-                      price,
-                      bedrooms,
-                      distanceToCampus,
-                    }) => (
-                      <li key={id}>
-                        <Unit
-                          id={id}
-                          name={name}
-                          description={description}
-                          price={price}
-                          bedrooms={bedrooms}
-                          distanceToCampus={distanceToCampus}
-                          toggleShow={toggleShow}
-                        />
-                      </li>
-                    )
+          <div className="flex w-full max-w-4xl gap-10">
+            {!error && <Filters setFilters={setFilters} />}
+            <div className="flex-1">
+              {data && (
+                <>
+                  {isLoading && (
+                    <p className="text-semibold mt-6 text-lg leading-7 text-gray-600">
+                      Loading...
+                    </p>
                   )}
-                </ul>
-              </div>
+                  <div>
+                    <h3 className="font-semibold">Available Units</h3>
+                    <ul role="list" className="w-full divide-y divide-gray-100">
+                      {data.map((unit) => (
+                        <li key={unit.id}>
+                          <Unit unit={unit} toggleShow={toggleShow} />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </main>
       <InterestedModal

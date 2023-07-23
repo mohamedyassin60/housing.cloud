@@ -5,8 +5,8 @@ export const studentRouter = createTRPCRouter({
   addToInterested: publicProcedure
     .input(z.object({ 
       unitId: z.string(),
-      name: z.string(),
-      email: z.string()
+      name: z.string().min(1),
+      email: z.string().email(),
     }))
     .mutation(({ input, ctx }) => {
       const { unitId, name, email } = input

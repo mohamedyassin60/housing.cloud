@@ -6,17 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useEffect } from "react";
 
-const unitSchema = z.object({
-  name: z
-    .string()
-    .min(1, { message: "Required field *" })
-    .max(32, { message: "Max charecters of 32" }),
-  description: z.string().min(1, { message: "Required field *" }),
-  bedrooms: z.number().positive().min(1),
-  price: z.number().positive().min(1),
-  distanceToCampus: z.number().positive().min(1),
-});
-
 const formInputs = [
   {
     id: "name",
@@ -45,9 +34,21 @@ const formInputs = [
   },
 ];
 
+const unitSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "Required field *" })
+    .max(32, { message: "Max charecters of 32" }),
+  description: z.string().min(1, { message: "Required field *" }),
+  bedrooms: z.number().positive().min(1),
+  price: z.number().positive().min(1),
+  distanceToCampus: z.number().positive().min(1),
+});
+
 export default function Home() {
   const { query, replace, back } = useRouter();
   const id: string = query.id?.toString() || "";
+  const utils = api.useContext();
   const updateMutation = api.housingUnit.updateById.useMutation();
   const deleteMutation = api.housingUnit.deleteById.useMutation();
   const { data, error, isLoading } = api.housingUnit.getById.useQuery(
@@ -77,10 +78,8 @@ export default function Home() {
         id,
       },
       {
-        onError(error) {
-          console.log("onDelete error", error);
-        },
         onSuccess() {
+          utils.housingUnit.invalidate();
           replace("/");
         },
       }
@@ -99,9 +98,6 @@ export default function Home() {
         distanceToCampus,
       },
       {
-        onError(error) {
-          console.log("onSubmit error", error);
-        },
         onSuccess() {
           back();
         },
